@@ -83,7 +83,10 @@ export default class DisplayPanelExtension extends Extension {
             this._effect = new Clutter.ShaderEffect({ shader_type: Clutter.ShaderType.FRAGMENT_SHADER });
         }
 
-        this._effect.set_shader_source(SHADER_SRC);
+        if (typeof this._effect.set_shader_source === 'function')
+            this._effect.set_shader_source(SHADER_SRC);
+        else
+            this._effect.shader_source = SHADER_SRC; // GNOME 51+: method removed, now a property
         this._applyAllSettings();
 
         Main.uiGroup.add_effect(this._effect);
